@@ -34,7 +34,7 @@
 
 // Module IDs
 constexpr uint32_t broadcastId = 0x7dfu;
-constexpr uint32_t bmsId = 0x781u;
+constexpr uint32_t bmsId = 0x7e5u;
 constexpr uint32_t dcdcId = 0x785u;
 constexpr uint32_t vcuId = 0x7e3u;
 constexpr uint32_t atcId = 0x750u;
