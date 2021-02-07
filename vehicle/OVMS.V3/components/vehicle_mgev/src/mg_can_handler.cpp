@@ -227,9 +227,24 @@ void OvmsVehicleMgEv::IncomingPollReply(
         data[0], data[1], data[2], data[3]
     );
 
+    if (__builtin_expect((m_type == Unknown), 0))
+    {
+        if (m_poll_moduleid_low == (mg5_bmsId | rxFlag))
+        {
+            m_type = MG5;
+            ConfigChanged(nullptr);
+        }
+        else if (m_poll_moduleid_low == (mgzs_bmsId | rxFlag))
+        {
+            m_type = ZS;
+            ConfigChanged(nullptr);
+        }
+    }
+
     switch (m_poll_moduleid_low)
     {
-        case (bmsId | rxFlag):
+        case (mg5_bmsId | rxFlag):
+        case (mgzs_bmsId | rxFlag):
             IncomingBmsPoll(pid, data, length, remain);
             break;
         case (dcdcId | rxFlag):

@@ -174,13 +174,28 @@ void OvmsVehicleMgEv::IncomingBmsPoll(
                         StandardMetrics.ms_v_charge_state->SetValue("topoff");
                     }
                 }
-                
-                // DoD is approx 6% - 97%, so we need to scale it
-                auto scaledSoc = ((soc * 106.0) / 97.0) - 6.0;
-                StandardMetrics.ms_v_bat_soc->SetValue(scaledSoc);
-                // Ideal range set to SoC percentage of 262 km (WLTP Range)
-                StandardMetrics.ms_v_bat_range_ideal->SetValue(262 * (scaledSoc / 100));
-                m_soc_raw->SetValue(soc);
+
+                if (m_type == MG5)
+                {
+                    //TM From observations, Car Dash SoC reading is:
+                    // (soc*1.0887)-4.886
+                    StandardMetrics.ms_v_bat_soc->SetValue((soc * 1.0887) - 4.886);
+                }
+                else
+                {
+                    // DoD is approx 6% - 97%, so we need to scale it
+                    StandardMetrics.ms_v_bat_soc->SetValue(((soc * 106.0) / 97.0) - 6.0);
+                }
+                if (m_type == MG5)
+                {
+                    // Ideal range set to SoC percentage of 344 km (WLTP Range)
+                    StandardMetrics.ms_v_bat_range_ideal->SetValue(344 * (StandardMetrics.ms_v_bat_soc->AsFloat() / 100));
+                }
+                else
+                {
+                    // Ideal range set to SoC percentage of 262 km (WLTP Range)
+                    StandardMetrics.ms_v_bat_range_ideal->SetValue(262 * (StandardMetrics.ms_v_bat_soc->AsFloat() / 100));
+                }
             }
             break;
         case bmsStatusPid:

@@ -77,6 +77,8 @@ class OvmsVehicleMgEv : public OvmsVehicle
     canbus* IdToBus(int id);
     void ConfigurePollInterface(int bus);
 
+	void ConfigurePolling();
+
     static void ZombieMode(TimerHandle_t timer);
     void ZombieMode();
 
@@ -98,8 +100,6 @@ class OvmsVehicleMgEv : public OvmsVehicle
     bool SendTesterPresentTo(canbus* currentBus, uint16_t id); 
     // Signal to an ECU to enter Diagnostic session defined by mode
     bool SendDiagSessionTo(canbus* currentBus, uint16_t id, uint8_t mode); 
-
-  
 
     void NotifyVehicleIdling() override;
 
@@ -143,6 +143,14 @@ class OvmsVehicleMgEv : public OvmsVehicle
         SendDiagnostic,  // Send Diagnostic Session Override to GWM
         Undefined    // We are not controlling GWM
     };
+    
+    /// The type of MG this is
+    enum Car
+    {
+    	Unknown,
+    	ZS,
+    	MG5
+    };
 
     /// A temporary store for the VIN
     char m_vin[18];
@@ -162,6 +170,12 @@ class OvmsVehicleMgEv : public OvmsVehicle
     bool carIsResponsiveToQueries;
     /// A count of the number of times we've woken the car to find it wasn't charging
     uint16_t m_diagCount;
+	/// The type of MG that is detected
+	Car m_type;
+	/// The polling structure, this is stored on external RAM which should be no slower
+	/// than accessing a const data structure as the Flash is stored externally on the
+	/// same interface and will be cached in the same way
+	OvmsVehicle::poll_pid_t* m_pollData;
     /// The command registered when the car is made to query the software versions of the
     /// different ECUs
     OvmsCommand* m_cmdSoftver;

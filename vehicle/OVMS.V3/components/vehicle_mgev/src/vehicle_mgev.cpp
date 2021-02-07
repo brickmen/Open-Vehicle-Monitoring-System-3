@@ -39,25 +39,50 @@ static const char *TAG = "v-mgev";
 
 namespace {
 
-const OvmsVehicle::poll_pid_t obdii_polls[] =
+const OvmsVehicle::poll_pid_t mgzs_obdii_polls[] = {
+    // The first element is used to determine the vehicle type
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, bmsStatusPid, {  0, 5, 5, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryBusVoltagePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryCurrentPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryVoltagePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batterySoCPid, {  0, 30, 30, 60  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryCoolantTempPid, {  0, 60, 60, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batterySoHPid, {  0, 120, 120, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, bmsRangePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell1StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell2StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell3StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell4StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell5StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell6StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell7StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell8StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mgzs_bmsId, mgzs_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell9StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+};
+
+const OvmsVehicle::poll_pid_t mg5_obdii_polls[] = {
+    // The first element is used to determine the vehicle type
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, bmsStatusPid, {  0, 5, 5, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryBusVoltagePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryCurrentPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryVoltagePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batterySoCPid, {  0, 30, 30, 60  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryCoolantTempPid, {  0, 60, 60, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batterySoHPid, {  0, 120, 120, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, bmsRangePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell1StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell2StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell3StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell4StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell5StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell6StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell7StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell8StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+    { mg5_bmsId, mg5_bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell9StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
+};
+
+const OvmsVehicle::poll_pid_t common_obdii_polls[] =
 {
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, bmsStatusPid, {  0, 5, 5, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryBusVoltagePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryCurrentPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryVoltagePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batterySoCPid, {  0, 30, 30, 60  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batteryCoolantTempPid, {  0, 60, 60, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, batterySoHPid, {  0, 120, 120, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, bmsRangePid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell1StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell2StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell3StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell4StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell5StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell6StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell7StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell8StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
-    { bmsId, bmsId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, cell9StatPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
     { dcdcId, dcdcId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, dcdcLvCurrentPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
     { dcdcId, dcdcId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, dcdcPowerLoadPid, {  0, 30, 30, 0  }, 0, ISOTP_STD },
     { dcdcId, dcdcId | rxFlag, VEHICLE_POLL_TYPE_OBDIIEXTENDED, dcdcTemperaturePid, {  0, 60, 60, 0  }, 0, ISOTP_STD },
@@ -140,7 +165,6 @@ OvmsVehicleMgEv::OvmsVehicleMgEv()
 
     m_rxPacketTicker = 0u;
     m_rxPackets = 0u;
-    
 
     // Until we know it's unlocked, say it's locked otherwise we might set off the alarm
     StandardMetrics.ms_v_env_locked->SetValue(true);
@@ -152,14 +176,16 @@ OvmsVehicleMgEv::OvmsVehicleMgEv()
     m_diagCount = 0u;
     m_noRxCount = 0u;
     m_preZombieOverrideTicker = 0u;
+    m_type = Unknown;
+    m_pollData = nullptr;
     carIsResponsiveToQueries = true;
 
     // Allow unlimited polling per second
     PollSetThrottling(0u);
 
     MyConfig.RegisterParam("xmg", "MG EV", true, true);
-    ConfigChanged(nullptr);
-    
+    ConfigurePolling();
+
     // Add command to get the software versions installed
     m_cmdSoftver = MyCommandApp.RegisterCommand(
         "softver", "MG EV Software", &OvmsVehicleMgEv::SoftwareVersions
@@ -175,10 +201,66 @@ OvmsVehicleMgEv::~OvmsVehicleMgEv()
 
     //xTimerDelete(m_zombieTimer, 0);
 
+    if (m_pollData)
+    {
+        free(m_pollData);
+    }
+
     if (m_cmdSoftver)
     {
         MyCommandApp.UnregisterCommand(m_cmdSoftver->GetName());
     }
+}
+
+void OvmsVehicleMgEv::ConfigurePolling()
+{
+    if (m_pollData)
+    {
+        PollSetPidList(nullptr, nullptr);
+        free(m_pollData);
+        m_pollData = nullptr;
+    }
+
+    size_t size = sizeof(common_obdii_polls);
+    switch (m_type)
+    {
+        case Unknown:
+            // Use the first of the MGZS and MG5 to determine the vehicle type
+            size += sizeof(OvmsVehicle::poll_pid_t) * 2;
+            break;
+    	case ZS:
+    	    size += sizeof(mgzs_obdii_polls);
+    	    break;
+    	case MG5:
+    	    size += sizeof(mg5_obdii_polls);
+    	    break;
+    }
+    m_pollData = reinterpret_cast<OvmsVehicle::poll_pid_t*>(ExternalRamMalloc(size));
+    if (m_pollData == nullptr)
+    {
+        ESP_LOGE(TAG, "Unable to allocate memory for polling");
+        return;
+    }
+
+    auto ptr = m_pollData;
+    switch (m_type)
+    {
+        case Unknown:
+            // Use the first of the MGZS and MG5 to determine the vehicle type
+            *ptr++ = mgzs_obdii_polls[0];
+            *ptr++ = mg5_obdii_polls[0];
+            break;
+    	case ZS:
+    	    ptr = std::copy(mgzs_obdii_polls, &mgzs_obdii_polls[sizeof(mgzs_obdii_polls) / sizeof(mgzs_obdii_polls[0])], ptr);
+    	    break;
+    	case MG5:
+    	    ptr = std::copy(mg5_obdii_polls, &mg5_obdii_polls[sizeof(mg5_obdii_polls) / sizeof(mg5_obdii_polls[0])], ptr);
+    	    break;
+    }
+    std::copy(common_obdii_polls, &common_obdii_polls[sizeof(common_obdii_polls) / sizeof(common_obdii_polls[0])], ptr);
+
+    // Re-start CAN bus, setting up the PID list
+    ConfigChanged(nullptr);
 }
 
 void OvmsVehicleMgEv::SoftwareVersions(
@@ -201,14 +283,14 @@ void OvmsVehicleMgEv::SoftwareVersions(
 void OvmsVehicleMgEv::SoftwareVersions(OvmsWriter* writer)
 {
     constexpr uint32_t ecus[] = {
-        bmsId, dcdcId, vcuId, atcId, bcmId, gwmId, tpmsId, pepsId, 0x761u, 0x760u, 0x784u,
-        0x750u, 0x776u, 0x771u, 0x782u, 0x734u, 0x733u, 0x732u, 0x730u, 0x723u, 0x721u,
-        0x720u, 0x711u
+        mgzs_bmsId, dcdcId, vcuId, atcId, bcmId, gwmId, tpmsId, pepsId, 0x761u, 0x760u,
+        0x784u, 0x750u, 0x776u, 0x771u, 0x782u, 0x734u, 0x733u, 0x732u, 0x730u, 0x723u,
+        0x721u, 0x720u, 0x711u, mg5_bmsId
     };
     const char *names[] = {
         "BMS", "DCDC", "VCU", "ATC", "BCM", "GWM", "TPMS", "PEPS", "ICE", "IPK", "EVCC",
         "ATC", "PLC", "SCU", "TC", "FDR", "FVCM", "RDRA", "SRM", "EPB", "EPS",
-        "ABS", "TBOX"
+        "ABS", "TBOX", "BMS"
     };
     constexpr uint32_t ecuCount = sizeof(ecus) / sizeof(ecus[0]);
 
@@ -281,7 +363,7 @@ void OvmsVehicleMgEv::SoftwareVersions(OvmsWriter* writer)
     m_versions.clear();
 
     // Re-start everything
-    m_poll_plist = obdii_polls;
+    m_poll_plist = m_pollData;
 }
 
 const char* OvmsVehicleMgEv::VehicleShortName()
@@ -349,62 +431,60 @@ void OvmsVehicleMgEv::DeterminePollState(canbus* currentBus, uint32_t ticker)
             ESP_LOGI(TAG, "12V has just started charging, setting to running poll mode. Reading");
         } 
 
-        if(m_gwmState == Undefined)
+        if (m_gwmState == Undefined)
         {
             PollSetState(PollStateRunning);
             ESP_LOGI(TAG, "GWM in Unknown state, possibly just changed vehicle type. Setting to running poll mode.");
         } 
 
-        
-        if ( carIgnitionOn && m_gwmState !=SendDiagnostic) // If ignition is on, we should set the car into running pollstate, Diagnostic override confuses things
+        // If ignition is on, we should set the car into running pollstate, Diagnostic override confuses things
+        if (carIgnitionOn && m_gwmState != SendDiagnostic)
         {
-            if( m_gwmState != SendTester )
+            if (m_gwmState != SendTester)
             {
                 m_gwmState = SendTester;
                 ESP_LOGI(TAG, "Car is Detected as Running, setting Tester Present GWM Mode");
             }
 
-            if( m_poll_state != PollStateRunning)
+            if (m_poll_state != PollStateRunning)
             {
                 // Car ignition Is on
                 PollSetState(PollStateRunning);
                 ESP_LOGI(TAG, "Car is Detected as Running, setting Running Pollstate");
             }
-            // ESP_LOGV(TAG, "Car is responding to Queries, rx %i and m_rx %i", rxPackets, m_rxPackets);
             carIsResponsiveToQueries = true;
             m_noRxCount = 0u;
             m_diagCount = 0;
             m_preZombieOverrideTicker = 0; 
-            
-            
-        } 
-        else if (carIsCharging) // If car is in a charging state we should set charging pollstate
+        }
+        // If car is in a charging state we should set charging pollstate
+        else if (carIsCharging)
         {
-            if(m_poll_state != PollStateCharging)
+            if (m_poll_state != PollStateCharging)
             {
                 PollSetState(PollStateCharging);
                 // Do not want to set GWM control here as it should remain in previous state
                 ESP_LOGI(TAG, "Car is Detected as Charging, setting Charging Pollstate" );
             }
-            if( m_gwmState != SendDiagnostic && m_gwmState != SendTester)
+            if (m_gwmState != SendDiagnostic && m_gwmState != SendTester)
             {
                 m_gwmState = SendTester;
                 ESP_LOGI(TAG, "Car is Detected as Charging without Session Override, setting Tester Present GWM Mode");
             }
-            // ESP_LOGV(TAG, "Car is responding to Queries, rx %i and m_rx %i", rxPackets, m_rxPackets);
             carIsResponsiveToQueries = true;
             m_noRxCount = 0u;
             m_diagCount = 0;
             m_preZombieOverrideTicker = 0; 
-            
-        } else if (StandardMetrics.ms_v_bat_soc->AsFloat() >= 97.0) // Car has completed charge, topping off 12V
+        }
+        // Car has completed charge, topping off 12V
+        else if (StandardMetrics.ms_v_bat_soc->AsFloat() >= 97.0)
         {
             ESP_LOGV(TAG, "Vehicle is topping of the 12V and is fully charged");
         }
-        else // State is not known
+        // State is not known
+        else
         {
-            
-            if( m_poll_state != PollStateListenOnly)
+            if (m_poll_state != PollStateListenOnly)
             {
                 ESP_LOGV(TAG, "Vehicle State is Unknown, checking if responsive");
             }
@@ -413,17 +493,16 @@ void OvmsVehicleMgEv::DeterminePollState(canbus* currentBus, uint32_t ticker)
             {
                 ESP_LOGV(TAG, "RX Frames Recieved, rx %i and m_rx %i and count %i ", rxPackets, m_rxPackets, m_noRxCount);
                 m_rxPackets = rxPackets;
-                if( m_noRxCount != 0)
+                if (m_noRxCount != 0)
                 {
-                    m_noRxCount --;
+                    --m_noRxCount;
                 }
-                
             }
             else
             {
                 ESP_LOGV(TAG, "No RX Frames Recieved, rx %i and m_rx %i and count %i ", rxPackets, m_rxPackets, m_noRxCount);
-                m_noRxCount ++;
-                if( m_noRxCount >= ZOMBIE_DETECT_TIMEOUT)
+                ++m_noRxCount;
+                if (m_noRxCount >= ZOMBIE_DETECT_TIMEOUT)
                 {
                     carIsResponsiveToQueries = false;
                     ZombieMode();
@@ -433,10 +512,8 @@ void OvmsVehicleMgEv::DeterminePollState(canbus* currentBus, uint32_t ticker)
     } 
     else
     {
-        
         // 12 V is now not charging, notify
-        
-        if( m_gwmState == SendDiagnostic)
+        if (m_gwmState == SendDiagnostic)
         {
             //Immediately sleep if we were in diagnostics mode
             ESP_LOGI(TAG, "12V has stopped charging, as we were sending diagnostics override, immediately stop this and all polling to unlock cable.");
@@ -455,30 +532,27 @@ void OvmsVehicleMgEv::DeterminePollState(canbus* currentBus, uint32_t ticker)
                 StandardMetrics.ms_v_charge_state->SetValue("stopped");
                 StandardMetrics.ms_v_charge_inprogress->SetValue(false);
             }
-        }else if (charging12vLast != StandardMetrics.ms_v_env_charging12v->AsBool())
+        }
+        else if (charging12vLast != StandardMetrics.ms_v_env_charging12v->AsBool())
         {
             ESP_LOGI(TAG, "12V has stopped charging, remain in current state for %i seconds.", TRANSITION_TIMEOUT);
-            //StandardMetrics.ms_v_env_on->SetValue(false);
         }
-        m_afterRunTicker ++;
-        if(m_afterRunTicker == TRANSITION_TIMEOUT)
+        ++m_afterRunTicker;
+        if (m_afterRunTicker == TRANSITION_TIMEOUT)
         {
             ESP_LOGI(TAG, "12V has not been charging for timeout, stopping all CAN transmission.");
             PollSetState(PollStateListenOnly);
             m_gwmState = AllowToSleep;
             StandardMetrics.ms_v_env_awake->SetValue(false);
         } 
-        else if(m_afterRunTicker >= TRANSITION_TIMEOUT)
+        else if (m_afterRunTicker >= TRANSITION_TIMEOUT)
         {
             // Do not let afterrun ticker go crazy, peg it at TRANSITION_TIMEOUT + 1
-            m_afterRunTicker = (TRANSITION_TIMEOUT +1) ;
+            m_afterRunTicker = (TRANSITION_TIMEOUT + 1);
         }
-
-        
-
     }
 
-    if( m_afterRunTicker != (TRANSITION_TIMEOUT +1))
+    if (m_afterRunTicker != (TRANSITION_TIMEOUT + 1))
     {
         ESP_LOGV(TAG, "Pollstate: %i , GWM State: %i , Rx Packet Count: %i , 12V level: %.2f.", m_poll_state, m_gwmState, rxPackets, voltage12V);
     }
@@ -494,29 +568,29 @@ void OvmsVehicleMgEv::ZombieMode()
         // Polling is disabled, so there's nothing to do here
         return;
     }
-    if( m_diagCount > DIAG_ATTEMPTS)
+    if (m_diagCount > DIAG_ATTEMPTS)
     {
-        if( m_poll_state != PollStateBackup)
+        if (m_poll_state != PollStateBackup)
         {
             ESP_LOGI(TAG, "Maximum number of Session Override Attempts Limit Reached going to backup mode, SoC reports only");
             PollSetState(PollStateBackup);
         }
         return;
     }
-    
-    if(m_preZombieOverrideTicker == 0)
+
+    if (m_preZombieOverrideTicker == 0)
     {
         ESP_LOGI(TAG, "OVMS thinks the GWM is in Zombie Mode, we are stopping all queries for 50 s until to try session override");
         PollSetState(PollStateListenOnly);
         m_gwmState = AllowToSleep;
     }
-    m_preZombieOverrideTicker ++;
+    ++m_preZombieOverrideTicker;
     if( m_preZombieOverrideTicker <= ZOMBIE_TIMEOUT)
     {
         ESP_LOGV(TAG, "Zombie Wait for %i Seconds.", m_preZombieOverrideTicker);
         return;
     }
-    m_diagCount ++;
+    ++m_diagCount;
     
     m_preZombieOverrideTicker = 0u;
     m_noRxCount = 0u;
@@ -528,7 +602,6 @@ void OvmsVehicleMgEv::ZombieMode()
     }
     PollSetState(PollStateCharging);
     m_gwmState = SendDiagnostic;
-    return;
 }
 
 void OvmsVehicleMgEv::SendAlarmSensitive(canbus* currentBus)
@@ -571,21 +644,6 @@ bool OvmsVehicleMgEv::SendDiagSessionTo(canbus* currentBus, uint16_t id, uint8_t
     };
     return currentBus->Write(&diagnosticControl) != ESP_FAIL;
 }
-
-// bool OvmsVehicleMgEv::SendPidQueryTo(canbus* currentBus, uint16_t id, uint8_t pid)
-// {
-//     //TODO
-//     // CAN_frame_t diagnosticControl = {
-//     //     currentBus,
-//     //     nullptr,
-//     //     { .B = { 8, 0, CAN_no_RTR, CAN_frame_std, 0 } },
-//     //     id,
-//     //     { .u8 = {
-//     //         (ISOTP_FT_SINGLE<<4) + 2, VEHICLE_POLL_TYPE_OBDIISESSION, mode, 0, 0, 0, 0, 0
-//     //     } }
-//     // };
-//     return currentBus->Write(&diagnosticControl) != ESP_FAIL;
-// }
 
 void OvmsVehicleMgEv::Ticker1(uint32_t ticker)
 {
@@ -672,6 +730,10 @@ void OvmsVehicleMgEv::ConfigurePollInterface(int bus)
     {
         // Already configured for that interface
         ESP_LOGI(TAG, "Already configured for interface, not re-configuring");
+        if (m_pollData && !m_poll_plist)
+        {
+            PollSetPidList(newBus, m_pollData);
+        }
         return;
     }
 
@@ -689,7 +751,10 @@ void OvmsVehicleMgEv::ConfigurePollInterface(int bus)
     // When called sets poll default bus which is what is used when set to 0 (as is
     // our case above).  If this is extended to use more busses, then will either need
     // to be called last, or the obdii_polls will need changing to set the bus to 1.
-    PollSetPidList(newBus, obdii_polls);
+    if (m_pollData)
+    {
+        PollSetPidList(newBus, m_pollData);
+    }
 
     if (oldBus != nullptr)
     {

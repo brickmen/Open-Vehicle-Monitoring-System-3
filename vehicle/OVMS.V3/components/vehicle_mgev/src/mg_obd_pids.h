@@ -32,9 +32,12 @@
 #ifndef MG_OBD_PIDS_H_
 #define MG_OBD_PIDS_H_
 
+#include <cstdint>
+
 // Module IDs
 constexpr uint32_t broadcastId = 0x7dfu;
-constexpr uint32_t bmsId = 0x781u;
+constexpr uint32_t mgzs_bmsId = 0x781u;
+constexpr uint32_t mg5_bmsId = 0x7e5u;
 constexpr uint32_t dcdcId = 0x785u;
 constexpr uint32_t vcuId = 0x7e3u;
 constexpr uint32_t atcId = 0x750u;
@@ -44,6 +47,8 @@ constexpr uint32_t tpmsId = 0x724u;
 constexpr uint32_t pepsId = 0x745u;
 constexpr uint32_t ipkId = 0x760u;
 constexpr uint32_t evccId = 0x784u;
+constexpr uint32_t tboxId = 0x711u;
+constexpr uint32_t pebId = 0x7e6u;
 constexpr uint32_t rxFlag = 0x8u;
 
 // Generic PIDs
