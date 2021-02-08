@@ -5,9 +5,7 @@ MG EV
 
 Vehicle Type: **MGEV**
 
-This vehicle type supports the MG ZS EV (2019-).
-
-MG5 is not yet supported in this build.
+This vehicle type supports the MG ZS EV (2019-) and MG5 (2020-).
 
 
 ----------------
