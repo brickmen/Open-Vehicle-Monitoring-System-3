@@ -232,12 +232,12 @@ void OvmsVehicleMgEv::IncomingPollReply(
         if (m_poll_moduleid_low == (mg5_bmsId | rxFlag))
         {
             m_type = MG5;
-            ConfigChanged(nullptr);
+            ConfigurePolling();
         }
         else if (m_poll_moduleid_low == (mgzs_bmsId | rxFlag))
         {
             m_type = ZS;
-            ConfigChanged(nullptr);
+           ConfigurePolling();
         }
     }
 
