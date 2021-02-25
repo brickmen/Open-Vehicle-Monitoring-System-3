@@ -99,8 +99,6 @@ class OvmsVehicleMgEv : public OvmsVehicle
     // Signal to an ECU to enter Diagnostic session defined by mode
     bool SendDiagSessionTo(canbus* currentBus, uint16_t id, uint8_t mode); 
 
-  
-
     void NotifyVehicleIdling() override;
 
     // mg_poll_bms.cpp
@@ -134,6 +132,10 @@ class OvmsVehicleMgEv : public OvmsVehicle
 
     // mg_poll_evcc.cpp
     void IncomingEvccPoll(uint16_t pid, uint8_t* data, uint8_t length);
+
+	// mg_gwm_auth.cpp
+	bool StartAuthentication(canbus* currentBus);
+	void GwmAuthentication(canbus* currentBus, uint8_t frameType, uint8_t* data);
 
     /// The states that the gateway CAN can be in
     enum GwmState

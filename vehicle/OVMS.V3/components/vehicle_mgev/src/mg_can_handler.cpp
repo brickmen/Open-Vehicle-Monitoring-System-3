@@ -129,6 +129,12 @@ void OvmsVehicleMgEv::IncomingPollFrame(CAN_frame_t* frame)
             return;
         }
     }
+    if (frame->MsgID == (gwmId | rxFlag) && (frameType & 4))
+    {
+        ESP_LOGV(TAG, "Got an gateway authentication response");
+        GwmAuthentication(frame->origin, frameType & 3, data);
+        return;
+    }
     if (frameType == ISOTP_FT_SINGLE || frameType == ISOTP_FT_FIRST)
     {
         if (frameType == ISOTP_FT_FIRST)

@@ -345,6 +345,7 @@ void OvmsVehicleMgEv::DeterminePollState(canbus* currentBus, uint32_t ticker)
         m_afterRunTicker = 0u;
         if (charging12vLast != StandardMetrics.ms_v_env_charging12v->AsBool())
         {
+            StartAuthentication(currentBus);
             PollSetState(PollStateRunning);
             ESP_LOGI(TAG, "12V has just started charging, setting to running poll mode. Reading");
         } 
