@@ -135,6 +135,12 @@ void OvmsVehicleMgEv::IncomingPollFrame(CAN_frame_t* frame)
         GwmAuthentication(frame->origin, frameType & 3, data);
         return;
     }
+    if (frame->MsgID == (bcmId | rxFlag) && (frameType & 4))
+    {
+        ESP_LOGV(TAG, "Got a BCM authentication response");
+        BcmAuthentication(frame->origin, frameType & 3, data);
+        return;
+    }
     if (frameType == ISOTP_FT_SINGLE || frameType == ISOTP_FT_FIRST)
     {
         if (frameType == ISOTP_FT_FIRST)

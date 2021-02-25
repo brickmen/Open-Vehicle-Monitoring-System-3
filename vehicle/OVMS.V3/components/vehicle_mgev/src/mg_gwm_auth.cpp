@@ -76,14 +76,8 @@ uint32_t iterate(uint32_t seed, uint32_t count)
 
 uint32_t pass2(uint32_t seed)
 {
-    uint32_t count = 37u + (((seed >> 24u) & 0x1cu) ^ 0x08u);
+    uint32_t count = 0x25u + (((seed >> 0x18u) & 0x1cu) ^ 0x08u);
     return iterate(seed, count) ^ 0xdc8fe1aeu;
-}
-
-uint32_t drl(uint32_t seed)
-{
-    uint32_t count = 43u + (((seed >> 24u) & 0x17u) ^ 0x02u);
-    return iterate(seed, count) ^ 0x594e348au;
 }
 
 }  // anon namespace

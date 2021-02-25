@@ -119,6 +119,8 @@ class OvmsVehicleMgEv : public OvmsVehicle
     void IncomingAtcPoll(uint16_t pid, uint8_t* data, uint8_t length);
 
     // mg_poll_bcm.cpp
+	bool StartBcmAuthentication(canbus* currentBus);
+	void BcmAuthentication(canbus* currentBus, uint8_t frameType, uint8_t* data);
     void IncomingBcmPoll(uint16_t pid, uint8_t* data, uint8_t length);
 
     // mg_poll_tpms.cpp

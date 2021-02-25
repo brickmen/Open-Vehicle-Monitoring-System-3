@@ -29,6 +29,9 @@
 ; THE SOFTWARE.
 */
 
+#include "ovms_log.h"
+static const char *TAG = "v-mgev";
+
 #include "vehicle_mgev.h"
 #include "mg_obd_pids.h"
 #include "metrics_standard.h"
@@ -45,6 +48,21 @@ enum DoorMasks : unsigned char {
     Boot = 32,
     Locked = 128
 };
+
+uint32_t iterate(uint32_t seed, uint32_t count)
+{
+    while (count--)
+    {
+        seed = (seed << 1u) | ((((((((seed >> 6u) ^ seed) >> 12u) ^ seed) >> 10u) ^ seed) >> 2u) & 1u);
+    }
+    return seed;
+}
+
+uint32_t pass(uint32_t seed)
+{
+    uint32_t count = 0x2bu + (((seed >> 0x18u) & 0x17u) ^ 0x02u);
+    return iterate(seed, count) ^ 0x594e348au;
+}
 
 }  // anon namespace
 
@@ -63,4 +81,82 @@ void OvmsVehicleMgEv::IncomingBcmPoll(uint16_t pid, uint8_t* data, uint8_t lengt
             StandardMetrics.ms_v_env_headlights->SetValue(data[0] > 1);
             break;
     }    
+}
+
+bool OvmsVehicleMgEv::StartBcmAuthentication(canbus* currentBus)
+{
+    CAN_frame_t authStart = {
+        currentBus,
+        nullptr,
+        { .B = { 2, 0, CAN_no_RTR, CAN_frame_std, 0 } },
+        bcmId,
+        { .u8 = {
+            (ISOTP_FT_FIRST<<4), 3, 0, 0, 0, 0, 0, 0
+        } }
+    };
+    return currentBus->Write(&authStart) != ESP_FAIL;
+}
+
+void OvmsVehicleMgEv::BcmAuthentication(canbus* currentBus, uint8_t frameType, uint8_t* data)
+{
+    CAN_frame_t nextFrame = {
+        currentBus,
+        nullptr,
+        { .B = { 0, 0, CAN_no_RTR, CAN_frame_std, 0 } },
+        bcmId,
+        { .u8 = {
+            0, 0, 0, 0, 0, 0, 0, 0
+        } }
+    };
+
+    bool known = false;
+
+    if (frameType == ISOTP_FT_FIRST)
+    {
+        if (*data == 3u)
+        {
+            // Start authentication
+            nextFrame.data.u8[0] = (ISOTP_FT_FLOWCTRL<<4) + 0xeu;
+            nextFrame.data.u8[1] = 0x00u;
+            nextFrame.FIR.B.DLC = 2u;
+            known = true;
+        }
+    }
+    else if (frameType == ISOTP_FT_FLOWCTRL)
+    {
+        // Request seed
+        nextFrame.data.u8[0] = (ISOTP_FT_CONSECUTIVE<<4) + 7;
+        nextFrame.data.u8[1] = 0x01u;
+        nextFrame.FIR.B.DLC = 2u;
+        known = true;
+    }
+    else if (frameType == ISOTP_FT_CONSECUTIVE)
+    {
+        if (*data == 0x01u)
+        {
+            // Seed response
+            uint32_t seed = (data[1] << 24) | (data[2] << 16) | (data[3] << 8) | data[4];
+            uint32_t key = pass(seed);
+            nextFrame.data.u8[0] = (ISOTP_FT_CONSECUTIVE<<4) + 7;
+            nextFrame.data.u8[1] = 0x02u;
+            nextFrame.data.u8[2] = key >> 24u;
+            nextFrame.data.u8[3] = key >> 16u;
+            nextFrame.data.u8[4] = key >> 8u;
+            nextFrame.data.u8[5] = key;
+            nextFrame.FIR.B.DLC = 6u;
+            known = true;
+        }
+        else if (*data == 0x02u)
+        {
+            // Seed accept, request TP
+            SendTesterPresentTo(currentBus, bcmId);
+        }
+    }
+
+    if (known)
+    {
+        if (currentBus->Write(&nextFrame) == ESP_FAIL) {
+            ESP_LOGE(TAG, "Error writing BCM authentication frame");
+        }
+    }
 }
